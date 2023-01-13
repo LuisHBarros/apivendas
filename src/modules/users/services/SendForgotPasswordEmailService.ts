@@ -31,12 +31,20 @@ class SendForgotPasswordEmailService {
 
 		// console.log(token)
 		await EtherialMail.sendEmail({
-			to: email,
+			to: {
+				name: user.name,
+        email: email,
+			},
 			subject: 'Recuperação de senha',
-			body: `Solicitação de redefinição de senha
-			para ${user.name} recebida: ${token.token}`,
-			from: 'equipe@apivendas.com.br',
-		});
+			template_data: {
+				template: `Olá {{name}}, segue seu token para recuperação de senha: {{token}}`,
+				variables: {name: user.name, token: token.token},
+			},
+			from: {
+				name: 'Equipe API Vendas',
+				email: 'equipe@apivendas.com.br',
+			}
+});
 
 	}
 }
