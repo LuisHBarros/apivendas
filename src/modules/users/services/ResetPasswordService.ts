@@ -4,6 +4,7 @@ import { hash } from 'bcryptjs'
 import { isAfter, addHours } from 'date-fns'
 import UsersRepository from "../typeorm/repositories/UsersRepository";
 import UserTokensRepository from "../typeorm/repositories/UserTokensRepository";
+import UserToken from "../typeorm/entities/UserToken";
 
 interface IRequest{
 	token: string,
@@ -41,7 +42,9 @@ class ResetPasswordService {
 
 		user.password = await hash(password, 8)
 
+		await usersRepository.save(user)
 
+		await userTokensRepository.delete(userToken.id);
 	}
 }
 
