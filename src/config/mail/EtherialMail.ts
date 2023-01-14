@@ -1,27 +1,7 @@
 import nodemailer from 'nodemailer';
 import {HandlebarsMailTemplate} from './HandlebarsMailTemplate'
+import { ISendMail } from './Interfaces';
 
-interface ITemplateVariable {
-	[key: string]: string	|	number;
-
-}
-
-interface IParseMailTemplate{
-	template: string;
-	variables: ITemplateVariable;
-}
-
-interface IMailContact {
-	name: string;
-	email: string;
-}
-
-interface ISendMail{
-	to: IMailContact;
-  from?: IMailContact;
-	subject: string;
-	template_data: IParseMailTemplate;
-}
 
 export default class EtherialMail{
 	static async sendEmail({ to, subject, template_data, from }: ISendMail): Promise<void> {
