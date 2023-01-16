@@ -2,7 +2,7 @@ import AppError from "@shared/errors/AppError";
 import { compare, hash } from "bcryptjs";
 import { getCustomRepository } from "typeorm"
 import Customer from "../typeorm/entities/Customer";
-import CustomersRepository from "../typeorm/entities/repositories/customersRepository";
+import CustomersRepository from "../typeorm/repositories/customersRepository";
 
 interface IRequest{
 	id: string;

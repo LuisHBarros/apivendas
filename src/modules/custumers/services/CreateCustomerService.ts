@@ -1,7 +1,7 @@
 import AppError from "@shared/errors/AppError";
 import {  getCustomRepository } from "typeorm";
 import Customer from "../typeorm/entities/Customer";
-import CustomersRepository from "../typeorm/entities/repositories/customersRepository";
+import CustomersRepository from "../typeorm/repositories/customersRepository";
 
 interface Irequest {
 	name: string;
@@ -19,6 +19,7 @@ class CreateCustomerService {
 			name,
 			email
 		})
+		await customersRepository.save(customer);
 
 		return customer;
 	}
