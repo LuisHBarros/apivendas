@@ -40,7 +40,7 @@ class SendForgotPasswordEmailService {
 			subject: 'Recuperação de senha',
 			template_data: {
 				file: forgotPasswordTemplate,
-				variables: {name: user.name, link: `http://localhost:3000/reset_password?token=${token}`},
+				variables: {name: user.name, link: `${process.env.WEB_URL}/reset_password?token=${token}`},
 			},
 			from: {
 				name: 'Equipe API Vendas',
