@@ -1,35 +1,31 @@
-import CustomersRepository from "@modules/custumers/typeorm/repositories/customersRepository";
-import { ProductRepository } from "@modules/products/typeorm/repositories/ProductsRepository";
+import { inject, injectable } from 'tsyringe';
 import RedisCache from "@shared/cache/RedisCache";
 import AppError from "@shared/errors/AppError";
-import { getCustomRepository } from "typeorm";
-import Order from "../typeorm/entities/Order";
-import OrdersProducts from "../typeorm/entities/OrdersProducts";
-import OrderRepository from "../typeorm/repositories/OrdersRepository";
+import { IOrdersRepository } from '../domain/repositories/IOrdersRepository';
+import {ICustomersRepository} from '@modules/custumers/domain/repositories/ICustomersRepository';
+import { IRequestCreateOrder } from '../domain/models/IRequestCreateOrder';
+import { IOrder } from '../domain/models/IOrder';
+import { IProductsRepository } from '@modules/products/domain/repositories/IProductsRepository';
 
-interface Iproducts{
-	id: string;
-	quantity: number
-}
-
-interface IRequest{
-	customer_id: string;
-	products: Iproducts[];
-}
-
+@injectable()
 class CreateOrderService{
-	public async execute({ customer_id, products }: IRequest): Promise<Order | undefined> {
-		const ordersRepository = getCustomRepository(OrderRepository)
-		const customersRepository = getCustomRepository(CustomersRepository)
-		const productsRepository = getCustomRepository(ProductRepository)
-		const redisCache = new RedisCache();
+	constructor(
+		@inject('OrdersRepository')
+		private ordersRepository: IOrdersRepository,
+		@inject('CustomersRepository')
+    private customersRepository: ICustomersRepository,
 
-		const customerExists = await customersRepository.findById(customer_id)
+    @inject('ProductsRepository')
+    private productsRepository: IProductsRepository,
+  ) {}
+	public async execute({ customer_id, products }: IRequestCreateOrder): Promise<IOrder> {
+
+		const customerExists = await this.customersRepository.findById(customer_id)
 
 		if (!customerExists)
 			throw new AppError("Customer not found", 404)
 
-		const productExists = await productsRepository.findAllByIds(products);
+		const productExists = await this.productsRepository.findAllByIds(products);
 		if (!productExists.length)
 			throw new AppError("Could not find any products", 404);
 
@@ -58,7 +54,7 @@ class CreateOrderService{
 				p => p.id === product.id)[0].price
 		})
 		);
-		const order = await ordersRepository.createOrder({
+		const order = await this.ordersRepository.create({
 			customer: customerExists,
 			products: serializedProducts
 		})
@@ -70,8 +66,8 @@ class CreateOrderService{
 				productExists.filter(p => p.id === product.product_id)[0].quantity - product.quantity
 		}))
 
-		await redisCache.invalidate('api-vendas_PRODUCT_LIST')
-		await productsRepository.save(updatedProductQuantity)
+		await RedisCache.invalidate('api-vendas_PRODUCT_LIST')
+		await this.productsRepository.updateStock(updatedProductQuantity)
 
     return order
 	}

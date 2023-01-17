@@ -1,29 +1,29 @@
 import AppError from "@shared/errors/AppError";
-import { getCustomRepository } from "typeorm"
 import { hash } from 'bcryptjs'
 import { isAfter, addHours } from 'date-fns'
-import UsersRepository from "../typeorm/repositories/UsersRepository";
-import UserTokensRepository from "../typeorm/repositories/UserTokensRepository";
-import UserToken from "../typeorm/entities/UserToken";
-
-interface IRequest{
-	token: string,
-	password: string
-}
+import { inject, injectable } from "tsyringe";
+import { IUsersRepository } from "../domain/repositories/IUsersRepository";
+import { IUserTokensRepository } from "../domain/repositories/IUserTokenRepository";
+import { IResetPassword } from "../domain/models/IResetPassword";
 
 
+@injectable()
 class ResetPasswordService {
-	private regex = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/;
-	public async execute({ token, password }: IRequest): Promise<void> {
-		const usersRepository = getCustomRepository(UsersRepository);
-		const userTokensRepository = getCustomRepository(UserTokensRepository);
+  constructor(
+    @inject('UsersRepository')
+    private usersRepository: IUsersRepository,
 
-		const userToken = await userTokensRepository.findByToken(token);
+    @inject('UserTokensRepository')
+    private userTokensRepository: IUserTokensRepository,
+  ) {}
+	private regex = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/;
+	public async execute({ token, password }: IResetPassword): Promise<void> {
+		const userToken = await this.userTokensRepository.findByToken(token);
 
 		if (!userToken) {
 			throw new AppError('User-Token does not exists');
 		}
-		const user = await usersRepository.findById(userToken.user_id);
+		const user = await this.usersRepository.findById(userToken.user_id);
 
 		if (!user) {
 			throw new AppError('User does not exists')
@@ -42,9 +42,9 @@ class ResetPasswordService {
 
 		user.password = await hash(password, 8)
 
-		await usersRepository.save(user)
+		await this.usersRepository.save(user)
 
-		await userTokensRepository.delete(userToken.id);
+		await this.userTokensRepository.delete(userToken);
 	}
 }
 
