@@ -1,13 +1,12 @@
+covarage/Icov-report
 .idea/
 .vscode/
 node_modules/
 build/
 temp/
 .env
-coverage
 ormconfig.json
 dist
 *.txt
 .docker/dbdata
-uploads/*
-!uploads/.gitkeep
+uploads/
