@@ -33,7 +33,7 @@ class UpdateProductService {
 		product.quantity = quantity;
 
 		//REDIS CACHE -- not tested
-		// await RedisCache.invalidate('api-vendas_PRODUCT_LIST');
+		await RedisCache.invalidate('api-vendas_PRODUCT_LIST');
 		await this.productsRepository.save(product);
 
 		return product;

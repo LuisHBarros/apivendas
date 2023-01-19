@@ -20,7 +20,7 @@ class CreateProductService {
 		if (productExists) {
 			throw new AppError('There is already one product with this name');
 		}
-		// await redisCache.invalidate('api-vendas_PRODUCT_LIST');
+		await redisCache.invalidate('api-vendas_PRODUCT_LIST');
 		const product = this.productsRepository.create({
 			name,
 			price,

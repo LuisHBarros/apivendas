@@ -20,7 +20,7 @@ class DeleteProductService {
 			throw new AppError('Product not found');
 		}
 		//REDIS CACHE -- not tested
-		// await RedisCache.invalidate('api-vendas_PRODUCT_LIST')
+		await RedisCache.invalidate('api-vendas_PRODUCT_LIST');
 		this.productsRepository.remove(product);
 	}
 }
