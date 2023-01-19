@@ -10,7 +10,7 @@ import {
 
 import OrdersProducts from './OrdersProducts';
 import { IOrder } from '@modules/orders/domain/models/IOrder';
-import Customer from '@modules/custumers/infra/typeorm/entities/Customer';
+import Customer from '../../../../custumers/infra/typeorm/entities/Customer';
 
 @Entity('orders')
 class Order implements IOrder {
