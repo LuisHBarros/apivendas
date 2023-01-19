@@ -1,9 +1,8 @@
-import { getRepository, Repository } from "typeorm";
-import { ICustomer } from "@modules/custumers/domain/models/ICustomer";
-import Order from "../entities/Order";
-import { IOrdersRepository } from "@modules/orders/domain/repositories/IOrdersRepository";
-import { ICreateOrder } from "@modules/orders/domain/models/ICreateOrder";
-
+import { getRepository, Repository } from 'typeorm';
+import { ICustomer } from '@modules/custumers/domain/models/ICustomer';
+import Order from '../entities/Order';
+import { IOrdersRepository } from '@modules/orders/domain/repositories/IOrdersRepository';
+import { ICreateOrder } from '@modules/orders/domain/models/ICreateOrder';
 
 class OrderRepository implements IOrdersRepository {
 	private ormRepository: Repository<Order>;
@@ -20,7 +19,7 @@ class OrderRepository implements IOrdersRepository {
 	public async create({ customer, products }: ICreateOrder): Promise<Order> {
 		const order = this.ormRepository.create({
 			customer,
-			order_products: products
+			order_products: products,
 		});
 		await this.ormRepository.save(order);
 		return order;
@@ -28,4 +27,3 @@ class OrderRepository implements IOrdersRepository {
 }
 
 export default OrderRepository;
-

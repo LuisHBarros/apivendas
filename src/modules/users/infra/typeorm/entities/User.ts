@@ -1,9 +1,15 @@
-import { Column, CreateDateColumn, Entity, PrimaryColumnCannotBeNullableError, PrimaryGeneratedColumn } from "typeorm";
-import { Exclude, Expose } from 'class-transformer'
-import { IUser } from "@modules/users/domain/models/IUsers";
+import {
+	Column,
+	CreateDateColumn,
+	Entity,
+	PrimaryColumnCannotBeNullableError,
+	PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Exclude, Expose } from 'class-transformer';
+import { IUser } from '@modules/users/domain/models/IUser';
 
 @Entity('users')
-class User implements IUser{
+class User implements IUser {
 	@PrimaryGeneratedColumn('uuid')
 	id: string;
 
@@ -27,11 +33,10 @@ class User implements IUser{
 	updated_at: Date;
 
 	@Expose({ name: 'avatar_url' })
-	getAvatarUrl(): string | null{
-		if (!this.avatar)
-			return null;
-		return `${process.env.API_URL}/files/${this.avatar}`
-	};
+	getAvatarUrl(): string | null {
+		if (!this.avatar) return null;
+		return `${process.env.API_URL}/files/${this.avatar}`;
+	}
 }
 
 export default User;

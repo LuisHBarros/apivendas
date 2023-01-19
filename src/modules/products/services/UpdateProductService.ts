@@ -1,17 +1,22 @@
-import RedisCache from "@shared/cache/RedisCache";
-import AppError from "@shared/errors/AppError";
-import { inject, injectable } from "tsyringe";
-import { IProduct } from "../domain/models/IProducts";
-import { IUpdateProduct } from "../domain/models/IUpdateProducts";
-import { IProductsRepository } from "../domain/repositories/IProductsRepository";
+import RedisCache from '@shared/cache/RedisCache';
+import AppError from '@shared/errors/AppError';
+import { inject, injectable } from 'tsyringe';
+import { IProduct } from '../domain/models/IProducts';
+import { IUpdateProduct } from '../domain/models/IUpdateProducts';
+import { IProductsRepository } from '../domain/repositories/IProductsRepository';
 
 @injectable()
 class UpdateProductService {
-		constructor(
+	constructor(
 		@inject('ProductsRepository')
-    private productsRepository: IProductsRepository,
-	){}
-	public async execute({ id, name, price, quantity }: IUpdateProduct):Promise<IProduct> {
+		private productsRepository: IProductsRepository,
+	) {}
+	public async execute({
+		id,
+		name,
+		price,
+		quantity,
+	}: IUpdateProduct): Promise<IProduct> {
 		const product = await this.productsRepository.findById(id);
 
 		if (!product) {
@@ -27,7 +32,8 @@ class UpdateProductService {
 		product.price = price;
 		product.quantity = quantity;
 
-		await RedisCache.invalidate('api-vendas_PRODUCT_LIST');
+		//REDIS CACHE -- not tested
+		// await RedisCache.invalidate('api-vendas_PRODUCT_LIST');
 		await this.productsRepository.save(product);
 
 		return product;

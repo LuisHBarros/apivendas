@@ -1,11 +1,11 @@
 import {
-  CreateDateColumn,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
+	CreateDateColumn,
+	Entity,
+	JoinColumn,
+	ManyToOne,
+	OneToMany,
+	PrimaryGeneratedColumn,
+	UpdateDateColumn,
 } from 'typeorm';
 
 import OrdersProducts from './OrdersProducts';
@@ -14,23 +14,25 @@ import Customer from '@modules/custumers/infra/typeorm/entities/Customer';
 
 @Entity('orders')
 class Order implements IOrder {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+	[x: string]: {};
+	@PrimaryGeneratedColumn('uuid')
+	id: string;
 
-  @ManyToOne(() => Customer)
-  @JoinColumn({ name: 'customer_id' })
-  customer: Customer;
+	@ManyToOne(() => Customer)
+	@JoinColumn({ name: 'customer_id' })
+	customer: Customer;
 
-  @OneToMany(() => OrdersProducts, order_products => order_products.order, {
-    cascade: true,
-  })
-  order_products: OrdersProducts[];
+	@OneToMany(() => OrdersProducts, order_products => order_products.order, {
+		cascade: true,
+	})
+	order_products: OrdersProducts[];
 
-  @CreateDateColumn()
-  created_at: Date;
+	@CreateDateColumn()
+	created_at: Date;
 
-  @UpdateDateColumn()
-  updated_at: Date;
+	@UpdateDateColumn()
+	updated_at: Date;
+	order: {};
 }
 
 export default Order;

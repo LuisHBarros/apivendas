@@ -10,7 +10,8 @@ const profileController = new ProfileController();
 profileRouter
 	.use(isAuthenticated)
 	.get('/', isAuthenticated, profileController.show)
-	.put('/',
+	.put(
+		'/:id',
 		celebrate({
 			[Segments.BODY]: {
 				name: Joi.string().required(),
@@ -21,11 +22,11 @@ profileRouter
 					.valid(Joi.ref('password'))
 					.when('password', {
 						is: Joi.exist(),
-						then: Joi.required()
+						then: Joi.required(),
 					}),
-      }
-			}
-		),
-		profileController.update)
+			},
+		}),
+		profileController.update,
+	);
 
-export default profileRouter
+export default profileRouter;

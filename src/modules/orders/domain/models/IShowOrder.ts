@@ -1,3 +1,3 @@
-export interface IShowOrder{
-	id: string;
+export interface IShowOrder {
+  id: string;
 }
