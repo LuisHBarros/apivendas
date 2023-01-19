@@ -12,6 +12,8 @@ import UserTokensRepository from '@modules/users/infra/typeorm/repositories/User
 import { IUserTokensRepository } from '@modules/users/domain/repositories/IUserTokenRepository';
 import { IHashProvider } from '@modules/users/providers/models/IHashProvider';
 import BcryptHashProvider from '@modules/users/providers/implementations/BcryptHashProvider';
+import { IMail } from '@config/mail/Interfaces';
+import EtherialMail from '@config/mail/EtherialMail';
 
 container.registerSingleton<ICustomersRepository>(
 	'CustomersRepository',
@@ -38,3 +40,5 @@ container.registerSingleton<IUserTokensRepository>(
 	'UserTokensRepository',
 	UserTokensRepository,
 );
+
+container.registerSingleton<IMail>('MailService', EtherialMail);

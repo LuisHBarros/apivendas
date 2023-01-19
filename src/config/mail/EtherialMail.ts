@@ -1,9 +1,9 @@
 import nodemailer from 'nodemailer';
 import { HandlebarsMailTemplate } from './HandlebarsMailTemplate';
-import { ISendMail } from './Interfaces';
+import { ISendMail, IMail } from './Interfaces';
 
-export default class EtherialMail {
-	static async sendEmail({
+export default class EtherialMail implements IMail {
+	async sendEmail({
 		to,
 		subject,
 		template_data,

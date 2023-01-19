@@ -1,10 +1,12 @@
-
 export interface ITemplateVariable {
-	[key: string]: string	|	number;
-
+	[key: string]: string | number;
 }
 
-export interface IParseMailTemplate{
+export interface IMail {
+	sendEmail({ to, subject, template_data, from }: ISendMail): Promise<void>;
+}
+
+export interface IParseMailTemplate {
 	file: string;
 	variables: ITemplateVariable;
 }
@@ -14,9 +16,9 @@ export interface IMailContact {
 	email: string;
 }
 
-export interface ISendMail{
+export interface ISendMail {
 	to: IMailContact;
-  from?: IMailContact;
+	from?: IMailContact;
 	subject: string;
 	template_data: IParseMailTemplate;
 }

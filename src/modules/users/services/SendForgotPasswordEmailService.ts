@@ -1,6 +1,6 @@
 import AppError from '@shared/errors/AppError';
 import path from 'path';
-import EtherialMail from '@config/mail/EtherialMail';
+import { IMail } from '@config/mail/Interfaces';
 import { inject, injectable } from 'tsyringe';
 import { IUsersRepository } from '../domain/repositories/IUsersRepository';
 import { IUserTokensRepository } from '../domain/repositories/IUserTokenRepository';
@@ -15,6 +15,9 @@ class SendForgotPasswordEmailService {
 
 		@inject('UserTokensRepository')
 		private userTokensRepository: IUserTokensRepository,
+
+		@inject('MailService')
+		private userMail: IMail,
 	) {}
 	public async execute({
 		email,
@@ -32,7 +35,7 @@ class SendForgotPasswordEmailService {
 			'../views/forgot_password.hbs',
 		);
 
-		await EtherialMail.sendEmail({
+		await this.userMail.sendEmail({
 			to: {
 				name: user.name,
 				email: email,
