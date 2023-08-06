@@ -12,7 +12,5 @@ O presente projeto teve seus serviços amplamente testados com Jest, contando co
 
 
 A API também contempla um sistema de login com autenticação de tokens JWT e a opção para implementar um serviço de envio de emails, visando a redefinição de senha de usuário
-
+Além disso, a API conta com um metodo de pagamento via Stripe para concluir seus pedidos.
 ...................................................................................................................................................................................................................................................................................................
-
-Esse Projeto ainda não está Pronto. Ainda existem planos de implementar um sistema de pagamento online e também para permitir que usuários façam sua autenticação via Oauth2, que serão implementados nos próximos dias.
